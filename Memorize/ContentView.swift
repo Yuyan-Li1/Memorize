@@ -8,20 +8,26 @@
 import SwiftUI
 
 struct ContentView: View {
-    var emojis = ["🚊", "✈️", "🚗", "🚁", "🚌", "🛴", "🚲", "🚖", "🚂", "🚀" , "🛸", "🛳", "🛶", "🚇", "🚡", "🚔", "🚚", "🚑", "🚒", "🚌", "🏎", "🦽"]
-    @State var emojiCount = 4
+    var emojis = ["🚊", "✈️", "🚗", "🚁", "🚌", "🛴", "🚲", "🚖", "🚂", "🚀" , "🛸", "🛳", "🛶", "🚇", "🚡", "🚔", "🚚", "🚑", "🚒", "🚌", "🏎", "🦽", "🚠", "🚅"]
+    @State var emojiCount = 24
     var body: some View {
         VStack{
-            HStack {
-                ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
-                    CardView(content: emoji)
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
+                    ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
+                        CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+                    }
                 }
+                .foregroundColor(/*@START_MENU_TOKEN@*/.red/*@END_MENU_TOKEN@*/)
             }
+            
+            Spacer()
             HStack {
                 remove
                 Spacer()
                 add
             }
+            .padding(.top, -2.0)
             .font(/*@START_MENU_TOKEN@*/.largeTitle/*@END_MENU_TOKEN@*/)
         }
         .padding(.horizontal)
@@ -61,10 +67,10 @@ struct CardView: View {
             let shape = RoundedRectangle(cornerRadius: 20.0)
             if isFaceUp {
                 shape
-                    .stroke(lineWidth: 3)
-                shape
                     .fill()
                     .foregroundColor(.white)
+                shape
+                    .strokeBorder(lineWidth: 3)
                 Text(content)
                     .font(.largeTitle)
             } else {
@@ -72,7 +78,6 @@ struct CardView: View {
                     .fill()
             }
         }
-        .foregroundColor(/*@START_MENU_TOKEN@*/.red/*@END_MENU_TOKEN@*/)
         .onTapGesture {
             isFaceUp = !isFaceUp
         }
